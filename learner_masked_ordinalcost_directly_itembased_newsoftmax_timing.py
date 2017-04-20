@@ -11,8 +11,8 @@ import numpy as np
 from blocks.bricks import Rectifier, Softmax, Identity, NDimensionalSoftmax, Tanh, Logistic, Softplus
 from blocks.initialization import Constant, Uniform
 from blocks.bricks import Initializable, Sequence, Feedforward, Linear, Brick
-from blocks.bricks import shared_floatx_nans, add_role
-from blocks.roles import WEIGHT, BIAS
+from blocks.utils import shared_floatx_nans
+from blocks.roles import add_role, WEIGHT, BIAS
 from blocks.bricks.base import application
 from toolz import interleave
 from blocks.bricks.cost import CategoricalCrossEntropy
@@ -511,34 +511,34 @@ if __name__ == '__main__':
     testset = MovieLens1M(which_set=['test'], sources=('input_ratings', 'output_ratings', 'input_masks', 'output_masks'))
     
     train_loop_stream = ForceFloatX(
-                                    data_stream=MovieLensTransformer(
-                                                                     
-                                            data_stream=Trainer_MovieLensTransformer(
-                                                                                     data_stream=DataStream(
-                                                                                                            dataset=trainset,
-                                                                                                            iteration_scheme=ShuffledScheme(
-                                                                                                                                            trainset.num_examples,
-                                                                                                                                            batch_size
-                                                                                                                                            )
-                                                                                                            )
-                                                                                     )
-                                                                     )
-                                    )
+        data_stream=MovieLensTransformer(
+
+            data_stream=Trainer_MovieLensTransformer(
+                 data_stream=DataStream(
+                    dataset=trainset,
+                    iteration_scheme=ShuffledScheme(
+                        trainset.num_examples,
+                        batch_size
+                        )
+                    )
+                 )
+             )
+        )
     
     trainval_loop_stream = ForceFloatX(
-                                    data_stream=MovieLensTransformer(
-                                                                     
-                                            data_stream=Trainer_MovieLensTransformer(
-                                                                                     data_stream=DataStream(
-                                                                                                            dataset=testset,
-                                                                                                            iteration_scheme=ShuffledScheme(
-                                                                                                                                            trainset.num_examples,
-                                                                                                                                            batch_size
-                                                                                                                                            )
-                                                                                                            )
-                                                                                     )
-                                                                     )
-                                    )
+        data_stream=MovieLensTransformer(
+
+            data_stream=Trainer_MovieLensTransformer(
+                 data_stream=DataStream(
+                    dataset=testset,
+                    iteration_scheme=ShuffledScheme(
+                        trainset.num_examples,
+                        batch_size
+                        )
+                    )
+                 )
+             )
+        )
     
 #     train_monitor_stream = ForceFloatX(
 #                             data_stream=MovieLensTransformer(
@@ -555,32 +555,32 @@ if __name__ == '__main__':
 #                                        )
     
     valid_monitor_stream = ForceFloatX(
-                            data_stream=MovieLensTransformer(
-                                                    data_stream=DataStream(
-                                                                           dataset=validset,
-                                                                           iteration_scheme=ShuffledScheme(
-                                                                                                           validset.num_examples,
-                                                                                                           batch_size
-                                                                                                           )
-                                                                           
-                                                                           )
-                                                    
-                                                    )
-                                       )
+        data_stream=MovieLensTransformer(
+            data_stream=DataStream(
+               dataset=validset,
+               iteration_scheme=ShuffledScheme(
+                   validset.num_examples,
+                   batch_size
+                   )
+
+               )
+
+            )
+       )
     
     test_monitor_stream = ForceFloatX(
-                            data_stream=MovieLensTransformer(
-                                                    data_stream=DataStream(
-                                                                           dataset=testset,
-                                                                           iteration_scheme=ShuffledScheme(
-                                                                                                           testset.num_examples,
-                                                                                                           batch_size
-                                                                                                           )
-                                                                           
-                                                                           )
-                                                    
-                                                    )
-                                       )
+        data_stream=MovieLensTransformer(
+            data_stream=DataStream(
+               dataset=testset,
+               iteration_scheme=ShuffledScheme(
+                   testset.num_examples,
+                   batch_size
+                   )
+
+               )
+
+            )
+       )
     
     rating_freq = np.zeros((6040, 5))
     init_b = np.zeros((6040, 5))
